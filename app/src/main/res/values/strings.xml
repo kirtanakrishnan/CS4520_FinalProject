@@ -15,4 +15,10 @@
     <string name="add">Add</string>
     <string name="namePrompt">Name:</string>
     <string name="musicCompatibility">Music Compatibility:</string>
+    <string name="name_username">Username</string>
+    <string name="name_editProfile">Edit Profile</string>
+    <string name="name_top10">Top 10 Tracks</string>
+    <string name="name_save">Save</string>
+    <string name="name_editUsername">New Username</string>
+    <string name="name_confirmUsername">Confirm New Username</string>
 </resources>
