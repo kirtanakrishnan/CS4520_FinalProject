@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/postRowLikeButton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textViewUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/username"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewSongName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="song name"
+        app:layout_constraintStart_toStartOf="@+id/textViewUsername"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUsername" />
+
+    <TextView
+        android:id="@+id/textViewArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="by song artist"
+        app:layout_constraintStart_toStartOf="@+id/textViewSongName"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSongName" />
+
+    <TextView
+        android:id="@+id/textViewTimePosted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="posted 5 minutes ago"
+        app:layout_constraintStart_toStartOf="@+id/textViewArtist"
+        app:layout_constraintTop_toBottomOf="@+id/textViewArtist" />
+
+    <TextView
+        android:id="@+id/textViewLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="location"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewTimePosted"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTimePosted" />
+
+    <ImageView
+        android:id="@+id/imageViewAlbumArt"
+        android:layout_width="136dp"
+        android:layout_height="125dp"
+        android:layout_marginEnd="52dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewUsername"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <ImageView
+        android:id="@+id/imageViewLikeButton"
+        android:layout_width="45dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewAlbumArt"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewAlbumArt"
+        app:srcCompat="@drawable/like_button" />
+</androidx.constraintlayout.widget.ConstraintLayout>
