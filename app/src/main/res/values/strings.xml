@@ -15,4 +15,12 @@
     <string name="add">Add</string>
     <string name="namePrompt">Name:</string>
     <string name="musicCompatibility">Music Compatibility:</string>
+    <string name="shareSong">Share what you\'re listening to right now!</string>
+    <string name="timer">1:00</string>
+    <string name="addSong">Add Song</string>
+    <string name="post">Post</string>
+    <string name="username">username</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="friends2">Friends</string>
 </resources>
