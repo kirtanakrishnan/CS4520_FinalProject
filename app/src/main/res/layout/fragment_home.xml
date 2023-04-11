@@ -8,6 +8,7 @@
     tools:context=".HomeFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="367dp"
         android:layout_height="618dp"
         android:layout_marginStart="16dp"
@@ -16,4 +17,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/logoutButton"
+        android:layout_width="37dp"
+        android:layout_height="41dp"
+        android:src="@android:drawable/presence_offline"
+        android:tint="@color/design_default_color_error"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.941"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
