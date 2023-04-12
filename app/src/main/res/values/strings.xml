@@ -23,4 +23,17 @@
     <string name="home">Home</string>
     <string name="profile">Profile</string>
     <string name="friends2">Friends</string>
+    <string name="name_username">Username</string>
+    <string name="name_editProfile">Edit Profile</string>
+    <string name="name_top10">Top 10 Tracks</string>
+    <string name="name_save">Save</string>
+    <string name="name_editUsername">Edit Username</string>
+    <string name="name_confirmUsername">Confirm Username</string>
+    <string name="connectToSpotify">Connect to Spotify</string>
+
+
+
+
+
+
 </resources>

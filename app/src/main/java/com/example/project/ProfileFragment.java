@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,9 +21,14 @@ public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    // Request code will be used to verify if result comes from the login activity. Can be set to any integer.
+    private static final int REQUEST_CODE = 1337;
+    private static final String REDIRECT_URI = "http://localhost:8080";
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Button buttonConnectSpotify;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -58,7 +64,15 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        buttonConnectSpotify = view.findViewById(R.id.buttonConnectToSpotify);
+        buttonConnectSpotify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return view;
     }
 }

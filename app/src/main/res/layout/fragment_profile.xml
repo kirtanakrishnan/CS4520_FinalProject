@@ -24,7 +24,7 @@
         android:id="@+id/profile_username"
         android:layout_width="81dp"
         android:layout_height="30dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:text="@string/name_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,32 +34,41 @@
         android:id="@+id/profile_editProfileButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="40dp"
         android:text="@string/name_editProfile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
         android:id="@+id/songs_list"
         android:layout_width="147dp"
         android:layout_height="214dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_username" />
+        app:layout_constraintTop_toBottomOf="@+id/top10Tracks" />
 
     <TextView
         android:id="@+id/top10Tracks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/name_top10"
-        app:layout_constraintBottom_toTopOf="@+id/songs_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.409"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_username"
-        app:layout_constraintVertical_bias="0.506" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonConnectToSpotify" />
+
+    <Button
+        android:id="@+id/buttonConnectToSpotify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/connectToSpotify"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_username" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
