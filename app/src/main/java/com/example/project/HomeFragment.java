@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
  */
 public class HomeFragment extends Fragment {
 
+    private RecyclerView friendsPostsRecyclerView;
+    private FriendsPostsAdapter adapter;
 
     private User currentLocalUser;
     private BottomNavigationView bottomNavigationView;
@@ -34,7 +38,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -64,10 +67,15 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
 
         bottomNavigationView.findViewById(R.id.bottomNavigationView);
+        friendsPostsRecyclerView = view.findViewById(R.id.friends_posts_recyclerView);
+        friendsPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-
+        List<Post> postsList = getFriendsPosts(); // get the list of friends' posts
+        adapter = new FriendsPostsAdapter(postsList);
+        friendsPostsRecyclerView.setAdapter(adapter);
 
         return view;
+
     }
 
 
