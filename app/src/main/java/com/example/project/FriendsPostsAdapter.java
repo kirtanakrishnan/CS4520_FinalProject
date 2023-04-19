@@ -9,7 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FriendsPostsAdapter extends RecyclerView.Adapter<FriendsPostsAdapter.PostViewHolder> {
+    List<Post> postsList = new ArrayList<Post>();
+
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -21,9 +26,11 @@ public class FriendsPostsAdapter extends RecyclerView.Adapter<FriendsPostsAdapte
     @Override
     public void onBindViewHolder(@NonNull FriendsPostsAdapter.PostViewHolder holder, int position) {
         Post post = postsList.get(position);
-
-        holder.postTitle.setText(post.getTitle());
-        holder.postContent.setText(post.getContent());
+        holder.postUsername.setText(post.getUsername());
+        holder.postSongName.setText(post.getSongTitle());
+        holder.postSongArtist.setText(post.getSongArtist());
+        holder.timePosted.setText(post.getTimePosted());
+        holder.likeButton.findViewById(R.id.imageViewLikeButton);
     }
 
     @Override
@@ -33,7 +40,7 @@ public class FriendsPostsAdapter extends RecyclerView.Adapter<FriendsPostsAdapte
 
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         public TextView postUsername, postSongName, postSongArtist, timePosted, postLocation;
-        public ImageView likeButton, postAlbumArt;
+        public ImageView likeButton;
 
 
 
@@ -44,7 +51,7 @@ public class FriendsPostsAdapter extends RecyclerView.Adapter<FriendsPostsAdapte
             postSongArtist = view.findViewById(R.id.textViewArtist);
             timePosted = view.findViewById(R.id.textViewTimePosted);
             postLocation = view.findViewById(R.id.textViewLocation);
-            postAlbumArt = view.findViewById(R.id.imageViewAlbumArt);
+            likeButton = view.findViewById(R.id.imageViewLikeButton);
 
             // initialize other views in the row as necessary
         }

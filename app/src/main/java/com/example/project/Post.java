@@ -1,11 +1,15 @@
 package com.example.project;
 
+import android.widget.ImageView;
+
 public class Post {
     private String username;
     private String songTitle;
     private String songArtist;
     private String timePosted; // change to another? type?
     private String location; // change to another type?
+
+    private ImageView likeButton;
 
 
     public Post() {}
@@ -16,6 +20,7 @@ public class Post {
         this.songArtist = songArtist;
         this.timePosted = timePosted;
         this.location = location;
+        this.likeButton = likeButton;
     }
 
     public String getUsername() {
@@ -56,5 +61,13 @@ public class Post {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public ImageView getLikeButton() {
+        return likeButton;
+    }
+
+    public void setLikeButton() {
+        this.likeButton = likeButton;
     }
 }
