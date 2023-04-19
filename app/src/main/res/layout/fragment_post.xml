@@ -8,6 +8,18 @@
     tools:context=".Fragments.PostFragment">
 
     <TextView
+        android:id="@+id/textViewUsernamePost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTime" />
+
+    <TextView
         android:id="@+id/textViewSongTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,6 +49,7 @@
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewSongArtist" />
 
@@ -49,5 +62,5 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTime" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewUsernamePost" />
 </androidx.constraintlayout.widget.ConstraintLayout>

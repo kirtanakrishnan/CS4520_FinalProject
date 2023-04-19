@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.project.Fragments.AddFriendsFragment;
 import com.example.project.Fragments.AddPostFragment;
@@ -19,6 +20,7 @@ import com.example.project.Fragments.ProfileFragment;
 import com.example.project.Fragments.SignUpFragment;
 import com.example.project.Interfaces.IFragmentCommunication;
 import com.example.project.Interfaces.IHomeToMain;
+import com.example.project.Interfaces.IAddPostToMain;
 import com.example.project.Interfaces.IPostToMain;
 import com.example.project.Interfaces.IProfileToMain;
 import com.example.project.Model.Post;
@@ -38,6 +40,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -49,7 +53,7 @@ import se.michaelthelin.spotify.model_objects.specification.PlayHistory;
 import se.michaelthelin.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 
 public class MainActivity extends AppCompatActivity implements IFragmentCommunication, IProfileToMain,
-        IPostToMain, IHomeToMain, BottomNavigationView
+        IAddPostToMain, IHomeToMain, IPostToMain, BottomNavigationView
                 .OnNavigationItemSelectedListener{
 
     private FirebaseAuth mAuth;
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     private static final String REDIRECT_URI = "http://localhost:8080/";
     private static final String CLIENT_ID = "cdf1584220164b2ab8d3ba003d6b350b";
     private SpotifyApi spotifyApi;
+    private ArrayList<Post> posts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +95,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                 .replace(R.id.mainLayout, landingFragment)
                 .commit();
 
-
-    }
-
-
-    private void connected() {
-        // Then we will write some more code here.
     }
 
     @Override
@@ -131,13 +130,15 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                 case TOKEN:
                     // Handle successful response
                     token = response.getAccessToken();
-                    Log.d("demo", "SUCCESSFULLY RETRIEVED TOKEN: " + token);
+                    Toast.makeText(this, "Connected to Spotify!", Toast.LENGTH_SHORT).show();
                     break;
 
                 // Auth flow returned an error
                 case ERROR:
                     // Handle error response
                     Log.d("demo", "FAILED TO CONNECT TO SPOTIFY");
+                    Toast.makeText(this, "Failed to connect to Spotify", Toast.LENGTH_SHORT).show();
+
                     break;
 
                 // Most likely auth flow was cancelled
@@ -166,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                             if(task.isSuccessful()){
                                 currentLocalUser = task.getResult()
                                         .toObject(User.class);
-//                                    Log.d(Tags.TAG, "Current user: "+currentLocalUser.toString());
                                 //Populating The Main Fragment....
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.mainLayout, new HomeFragment(currentLocalUser),"homeFragment")
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
            case R.id.menuHome:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.mainLayout, HomeFragment.newInstance(),
+                        .replace(R.id.mainLayout, HomeFragment.newInstance(posts),
                                 "homeFragment")
                         .commit();
                 return true;
@@ -269,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     @Override
     public void addSongButtonClicked() {
         Post post = getMostRecentSong();
+        post.setUsername(currentLocalUser.getName());
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.mainLayout, PostFragment.newInstance(post),
@@ -312,12 +313,20 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
             System.out.println("Error: " + e.getCause().getMessage());
         } catch (CancellationException e) {
             System.out.println("Async operation cancelled.");
+        } catch(AssertionError e) {
+            Toast.makeText(this, "You must connect to Spotify before posting", Toast.LENGTH_SHORT).show();
         }
         return post;
     }
 
     @Override
-    public void postButtonClicked() {
+    public void postButtonClicked(Post post) {
+        posts.add(post);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.mainLayout, HomeFragment.newInstance(posts),
+                        "homeFragment")
+                .commit();
 
     }
 

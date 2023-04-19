@@ -132,7 +132,6 @@ public class LandingFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                Log.d("demo", "sign up button clicked");
                 mListener.populateSignUpFragment();
             }
         });

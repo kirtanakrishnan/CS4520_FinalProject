@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.project.Interfaces.IPostToMain;
+import com.example.project.Interfaces.IAddPostToMain;
 import com.example.project.R;
 
 /**
@@ -30,7 +30,7 @@ public class AddPostFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button buttonAddSong;
-    private IPostToMain postToMain;
+    private IAddPostToMain postToMain;
 
     public AddPostFragment() {
         // Required empty public constructor
@@ -79,8 +79,8 @@ public class AddPostFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof IPostToMain){
-            this.postToMain = (IPostToMain) context;
+        if (context instanceof IAddPostToMain){
+            this.postToMain = (IAddPostToMain) context;
         }else{
             throw new RuntimeException(context.toString()+ "must implement IPostToMain");
         }

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,13 @@ import android.widget.ImageView;
 import com.example.project.FriendsPostsAdapter;
 import com.example.project.Interfaces.IFragmentCommunication;
 import com.example.project.Interfaces.IHomeToMain;
+import com.example.project.Model.Post;
 import com.example.project.Model.User;
 import com.example.project.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +35,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView friendsPostsRecyclerView;
     private FriendsPostsAdapter adapter;
+    private static final String ARG_POSTS = "posts";
 
     private User currentLocalUser;
     private BottomNavigationView bottomNavigationView;
@@ -37,6 +43,7 @@ public class HomeFragment extends Fragment {
     private IFragmentCommunication mListener;
     private ImageView addButton;
     private IHomeToMain homeToMain;
+    private ArrayList<Post> posts;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -45,10 +52,10 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public static HomeFragment newInstance() {
+    public static HomeFragment newInstance(ArrayList<Post> posts) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-
+        args.putSerializable(ARG_POSTS, posts);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,7 +64,15 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            this.posts = (ArrayList<Post>) getArguments().getSerializable(ARG_POSTS);
+            if(posts != null) {
+                Log.d("demo", "posts: " + posts.toString());
 
+            }
+            else{
+                Log.d("demo", "posts is null");
+
+            }
         }
         getActivity().setTitle("Home");
 
@@ -87,8 +102,9 @@ public class HomeFragment extends Fragment {
 
 
       //  List<Post> postsList = getFriendsPosts(); // get the list of friends' posts
-     //   adapter = new FriendsPostsAdapter(postsList);
-     //   friendsPostsRecyclerView.setAdapter(adapter);
+        adapter = new FriendsPostsAdapter(getContext(), posts);
+        Log.d("demo", "setting posts");
+        friendsPostsRecyclerView.setAdapter(adapter);
 
         return view;
 

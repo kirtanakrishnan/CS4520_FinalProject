@@ -1,6 +1,7 @@
 package com.example.project.Interfaces;
 
+import com.example.project.Model.Post;
+
 public interface IPostToMain {
-    void addSongButtonClicked();
-    void postButtonClicked();
+    void postButtonClicked(Post post);
 }
