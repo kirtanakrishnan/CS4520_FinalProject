@@ -12,4 +12,6 @@ public interface IFragmentCommunication {
     void registerDone(FirebaseUser firebaseUser, User user);
 
     void navigationView(MenuItem item);
+
+    void logoutPressed();
 }

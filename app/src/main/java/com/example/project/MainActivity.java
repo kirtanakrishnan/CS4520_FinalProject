@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        setTitle("Sound Soulmates");
+
         bottomNavigationView
                 = findViewById(R.id.bottomNavigationView);
 
@@ -83,15 +85,15 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                 .setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.menuHome);
         // Get the FragmentManager
-        FragmentManager fragmentManager = getSupportFragmentManager();
+       // FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Create a new instance of the fragment you want to display
-        LandingFragment landingFragment = new LandingFragment();
+      //  LandingFragment landingFragment = new LandingFragment();
 
         // Replace the current fragment with the new one
-        fragmentManager.beginTransaction()
+        /*fragmentManager.beginTransaction()
                 .replace(R.id.mainLayout, landingFragment)
-                .commit();
+                .commit();*/
 
     }
 
@@ -271,6 +273,13 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     }
 
     @Override
+    public void logoutPressed() {
+        mAuth.signOut();
+        currentUser = null;
+        populateScreen();
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuFriends:
@@ -278,6 +287,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                         .beginTransaction()
                         .replace(R.id.mainLayout, AddFriendsFragment.newInstance(),
                                 "addFriendsFragment")
+                        .addToBackStack("addFriendsFragment")
                         .commit();
                 Log.d("demo", "went to add friends fragment" );
                 return true;
@@ -287,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                         .beginTransaction()
                         .replace(R.id.mainLayout, HomeFragment.newInstance(posts),
                                 "homeFragment")
+                        .addToBackStack("homeFragment")
                         .commit();
                 return true;
 

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.project.FriendsPostsAdapter;
@@ -39,7 +40,7 @@ public class HomeFragment extends Fragment {
 
     private User currentLocalUser;
     private BottomNavigationView bottomNavigationView;
-    private Button logoutButton;
+    private ImageButton logoutButton;
     private IFragmentCommunication mListener;
     private ImageView addButton;
     private IHomeToMain homeToMain;
@@ -92,6 +93,8 @@ public class HomeFragment extends Fragment {
         friendsPostsRecyclerView = view.findViewById(R.id.friends_posts_recyclerView);
         friendsPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addButton = view.findViewById(R.id.imageViewAddButton);
+        logoutButton = view.findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(this::onLogoutPressed);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,19 +109,33 @@ public class HomeFragment extends Fragment {
         Log.d("demo", "setting posts");
         friendsPostsRecyclerView.setAdapter(adapter);
 
+
+
+
         return view;
 
     }
-
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (context instanceof IHomeToMain){
             this.homeToMain = (IHomeToMain) context;
-        }else{
+        } else if (context instanceof IFragmentCommunication){
+            this.mListener = (IFragmentCommunication) context;
+        }
+
+        else{
             throw new RuntimeException(context.toString()+ "must implement IHomeToMain");
         }
+
     }
+
+    private void onLogoutPressed(View view) {
+        mListener.logoutPressed();
+    }
+
+
+
 
 }
