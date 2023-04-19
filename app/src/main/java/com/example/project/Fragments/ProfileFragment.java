@@ -41,20 +41,13 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(ArrayList<String> topSongs) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_TOPSONGS, topSongs);
-
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public static ProfileFragment newInstance(User user) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_USERNAME, user.getName());
+        args.putSerializable(ARG_TOPSONGS, user.getTopTracks());
+
         fragment.setArguments(args);
         return fragment;
     }

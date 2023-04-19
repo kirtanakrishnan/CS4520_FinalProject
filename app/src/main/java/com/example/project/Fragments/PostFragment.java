@@ -12,10 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.project.Interfaces.IAddPostToMain;
 import com.example.project.Interfaces.IPostToMain;
 import com.example.project.Model.Post;
-import com.example.project.Model.User;
 import com.example.project.R;
 
 /**
@@ -117,7 +115,7 @@ public class PostFragment extends Fragment {
         if (context instanceof IPostToMain){
             this.postToMain = (IPostToMain) context;
         }else{
-            throw new RuntimeException(context.toString()+ "must implement IPostToMain");
+            throw new RuntimeException(context + "must implement IPostToMain");
         }
     }
 }

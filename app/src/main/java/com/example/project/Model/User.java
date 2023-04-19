@@ -2,14 +2,25 @@ package com.example.project.Model;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 public class User {
 
     private String name;
     private String email;
     private String imageuri;
+    private ArrayList<String> topTracks;
 
     public User(){
 
+    }
+
+    public ArrayList<String> getTopTracks() {
+        return topTracks;
+    }
+
+    public void setTopTracks(ArrayList<String> topTracks) {
+        this.topTracks = topTracks;
     }
 
     public String getName() {

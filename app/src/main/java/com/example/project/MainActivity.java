@@ -30,8 +30,6 @@ import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,19 +39,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 import se.michaelthelin.spotify.SpotifyApi;
-import se.michaelthelin.spotify.model_objects.specification.Artist;
 import se.michaelthelin.spotify.model_objects.specification.ArtistSimplified;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.PagingCursorbased;
 import se.michaelthelin.spotify.model_objects.specification.PlayHistory;
 import se.michaelthelin.spotify.model_objects.specification.Track;
-import se.michaelthelin.spotify.model_objects.specification.TrackSimplified;
 import se.michaelthelin.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
 import se.michaelthelin.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 
@@ -67,14 +62,12 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     private FirebaseFirestore db;
     private BottomNavigationView bottomNavigationView;
     private String token;
-    private static final String RECENTLY_PLAYED = "https://api.spotify.com/v1/me/player/recently-played";
 
-    // Request code will be used to verify if result comes from the login activity. Can be set to any integer.
     private static final int REQUEST_CODE = 1337;
     private static final String REDIRECT_URI = "http://localhost:8080/";
     private static final String CLIENT_ID = "cdf1584220164b2ab8d3ba003d6b350b";
     private SpotifyApi spotifyApi;
-    private ArrayList<Post> posts = new ArrayList<>();
+    private final ArrayList<Post> posts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,8 +106,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 
     @Override
     public ArrayList<String> getTopTenSongs() {
-        ArrayList<String> tracks = getTopTenSongsHelper();
-        return tracks;
+        return getTopTenSongsHelper();
     }
 
 
@@ -134,9 +126,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
         try {
             final CompletableFuture<Paging<Track>> pagingFuture = getUsersTopTracksRequest.executeAsync();
 
-            // Thread free to do other tasks...
-
-            // Example Only. Never block in production code.
             final Paging<Track> trackPaging = pagingFuture.join();
             Track[] trackList = trackPaging.getItems();
             for(Track track: trackList) {
@@ -145,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                 System.out.println(track.getName() + " by " + artists[0].getName());
             }
 
-            //     System.out.println("Total: " + trackPaging.getTotal());
         } catch (CompletionException e) {
             System.out.println("Error: " + e.getCause().getMessage());
         } catch (CancellationException e) {
@@ -180,8 +168,9 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                     token = response.getAccessToken();
                     Toast.makeText(this, "Connected to Spotify!", Toast.LENGTH_SHORT).show();
                     ArrayList<String> topSongs = getTopTenSongs();
+                    currentLocalUser.setTopTracks(topSongs);
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.mainLayout, ProfileFragment.newInstance(topSongs),"profileFragment")
+                            .replace(R.id.mainLayout, ProfileFragment.newInstance(currentLocalUser),"profileFragment")
                             .addToBackStack(null)
                             .commit();
                     break;
@@ -269,19 +258,11 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
         db.collection("users")
                 .document(user.getEmail())
                 .set(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
+                .addOnSuccessListener(unused -> {
 //                      On success populate home screen...
-                        // Log.d(Tags.TAG, "onSuccess: updated data");
-                        populateScreen();
-                    }
+                    populateScreen();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Log.e(Tags.TAG, "onFailure: "+e.getMessage());
-                    }
+                .addOnFailureListener(e -> {
                 });
     }
 
