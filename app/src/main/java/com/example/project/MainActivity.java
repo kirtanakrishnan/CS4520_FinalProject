@@ -4,6 +4,7 @@ import static com.spotify.sdk.android.auth.AccountsQueryParameters.CLIENT_ID;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -56,6 +57,20 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 
         bottomNavigationView
                 = findViewById(R.id.bottomNavigationView);
+
+        bottomNavigationView
+                .setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.setSelectedItemId(R.id.menuHome);
+        // Get the FragmentManager
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // Create a new instance of the fragment you want to display
+        LandingFragment landingFragment = new LandingFragment();
+
+        // Replace the current fragment with the new one
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainLayout, landingFragment)
+                .commit();
 
 
     }
@@ -131,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 //                                    Log.d(Tags.TAG, "Current user: "+currentLocalUser.toString());
                                 //Populating The Main Fragment....
                                 getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.fragmentContainerView, new HomeFragment(currentLocalUser),"homeFragment")
+                                        .replace(R.id.mainLayout, new HomeFragment(currentLocalUser),"homeFragment")
                                         .commit();
 
                             }else{
@@ -159,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     @Override
     public void populateSignUpFragment() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView, SignUpFragment.newInstance(),"signUpFragment")
+                .replace(R.id.mainLayout, SignUpFragment.newInstance(),"signUpFragment")
                 .addToBackStack(null)
                 .commit();
 
@@ -198,11 +213,12 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Log.d("demo", "NAV BAR ITEM SELECTED");
         switch (item.getItemId()) {
             case R.id.menuFriends:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragmentContainerView, AddFriendsFragment.newInstance(),
+                        .replace(R.id.mainLayout, AddFriendsFragment.newInstance(),
                                 "addFriendsFragment")
                         .commit();
                 Log.d("demo", "went to add friends fragment" );
@@ -211,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
            case R.id.menuHome:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragmentContainerView, HomeFragment.newInstance(),
+                        .replace(R.id.mainLayout, HomeFragment.newInstance(),
                                 "homeFragment")
                         .commit();
                 return true;
@@ -219,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
             case R.id.menuProfile:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragmentContainerView, ProfileFragment.newInstance(),
+                        .replace(R.id.mainLayout, ProfileFragment.newInstance(),
                                 "profileFragment")
                         .commit();
                 return true;

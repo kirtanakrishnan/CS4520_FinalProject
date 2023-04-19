@@ -72,9 +72,9 @@ public class HomeFragment extends Fragment {
         friendsPostsRecyclerView = view.findViewById(R.id.friends_posts_recyclerView);
         friendsPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        List<Post> postsList = getFriendsPosts(); // get the list of friends' posts
-        adapter = new FriendsPostsAdapter(postsList);
-        friendsPostsRecyclerView.setAdapter(adapter);
+      //  List<Post> postsList = getFriendsPosts(); // get the list of friends' posts
+     //   adapter = new FriendsPostsAdapter(postsList);
+     //   friendsPostsRecyclerView.setAdapter(adapter);
 
         return view;
 
@@ -89,8 +89,6 @@ public class HomeFragment extends Fragment {
                 return true;
 
             case R.id.menuHome:
-                mListener.navigationView(item);
-                return true;
 
             case R.id.menuProfile:
                 mListener.navigationView(item);
