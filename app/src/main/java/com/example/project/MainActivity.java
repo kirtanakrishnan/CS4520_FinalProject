@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.project.Interfaces.IPostToMain;
 import com.example.project.Interfaces.IProfileToMain;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
@@ -26,8 +27,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import okhttp3.OkHttpClient;
+
 public class MainActivity extends AppCompatActivity implements IFragmentCommunication, IProfileToMain,
-        BottomNavigationView
+        IPostToMain, BottomNavigationView
                 .OnNavigationItemSelectedListener{
 
     private FirebaseAuth mAuth;
@@ -35,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     private User currentLocalUser;
     private FirebaseFirestore db;
     private BottomNavigationView bottomNavigationView;
+    private String token;
+    private static final String RECENTLY_PLAYED = "https://api.spotify.com/v1/me/player/recently-played";
+
 
 
     // Request code will be used to verify if result comes from the login activity. Can be set to any integer.
@@ -87,11 +93,13 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                 // Response was successful and contains auth token
                 case TOKEN:
                     // Handle successful response
+                    token = response.getAccessToken();
                     break;
 
                 // Auth flow returned an error
                 case ERROR:
                     // Handle error response
+                    Log.d("demo", "FAILED TO CONNECT TO SPOTIFY");
                     break;
 
                 // Most likely auth flow was cancelled
@@ -220,4 +228,14 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     }
 
 
+    @Override
+    public void addSongButtonClicked() {
+        OkHttpClient client = new OkHttpClient();
+        
+    }
+
+    @Override
+    public void postButtonClicked() {
+
+    }
 }

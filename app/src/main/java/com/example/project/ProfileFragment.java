@@ -1,13 +1,17 @@
 package com.example.project;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.project.Interfaces.IProfileToMain;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,13 +26,11 @@ public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // Request code will be used to verify if result comes from the login activity. Can be set to any integer.
-    private static final int REQUEST_CODE = 1337;
-    private static final String REDIRECT_URI = "http://localhost:8080";
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private Button buttonConnectSpotify;
+    private IProfileToMain profileToMain;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -60,10 +62,20 @@ public class ProfileFragment extends Fragment {
         buttonConnectSpotify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                profileToMain.connectToSpotifyButtonClicked();
             }
         });
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof IProfileToMain){
+            this.profileToMain = (IProfileToMain) context;
+        }else{
+            throw new RuntimeException(context.toString()+ "must implement IProfileToMain");
+        }
     }
 }

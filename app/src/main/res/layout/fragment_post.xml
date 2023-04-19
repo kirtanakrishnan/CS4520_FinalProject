@@ -9,37 +9,24 @@
 
     <TextView
         android:id="@+id/textViewShareSong"
-        android:layout_width="294dp"
-        android:layout_height="75dp"
+        android:layout_width="295dp"
+        android:layout_height="224dp"
         android:layout_marginTop="50dp"
         android:gravity="center"
         android:text="@string/shareSong"
-        android:textAppearance="@android:style/TextAppearance.Material.Display2"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewTimer"
-        android:layout_width="118dp"
-        android:layout_height="82dp"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:text="@string/timer"
-        android:textAppearance="@android:style/TextAppearance.Material.Display2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewShareSong" />
-
     <Button
         android:id="@+id/buttonAddSong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_width="159dp"
+        android:layout_height="64dp"
         android:text="@string/addSong"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTimer" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewShareSong" />
 
     <Button
         android:id="@+id/buttonPost"
