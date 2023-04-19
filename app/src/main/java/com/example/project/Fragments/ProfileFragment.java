@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.project.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.project.Interfaces.IProfileToMain;
+import com.example.project.R;
 
 /**
  * A simple {@link Fragment} subclass.

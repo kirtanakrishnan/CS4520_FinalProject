@@ -5,7 +5,7 @@
     android:id="@+id/addPostLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddPostFragment">
+    tools:context=".Fragments.AddPostFragment">
 
     <TextView
         android:id="@+id/textViewShareSong"

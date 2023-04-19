@@ -9,7 +9,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="com.example.project.LandingFragment"
+        android:name="com.example.project.Fragments.LandingFragment"
         android:layout_width="416dp"
         android:layout_height="655dp"
         android:layout_marginEnd="411dp"

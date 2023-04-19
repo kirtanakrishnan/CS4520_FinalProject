@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.project.Fragments;
 
 import android.os.Bundle;
 
@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.project.Model.Post;
+import com.example.project.R;
 
 /**
  * A simple {@link Fragment} subclass.

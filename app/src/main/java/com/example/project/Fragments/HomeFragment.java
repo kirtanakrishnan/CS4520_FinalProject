@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.project.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,17 +8,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.project.FriendsPostsAdapter;
 import com.example.project.Interfaces.IFragmentCommunication;
 import com.example.project.Interfaces.IHomeToMain;
-import com.example.project.Interfaces.IPostToMain;
+import com.example.project.Model.User;
+import com.example.project.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
