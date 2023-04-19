@@ -1,7 +1,8 @@
-package com.example.project;
+package com.example.project.Interfaces;
 
 import android.view.MenuItem;
 
+import com.example.project.User;
 import com.google.firebase.auth.FirebaseUser;
 
 public interface IFragmentCommunication {

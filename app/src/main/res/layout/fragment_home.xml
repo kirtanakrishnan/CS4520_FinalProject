@@ -12,8 +12,8 @@
         android:layout_width="367dp"
         android:layout_height="618dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,4 +30,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/imageViewAddButton"
+        android:layout_width="68dp"
+        android:layout_height="63dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/add_button"
+        app:layout_constraintBottom_toBottomOf="@+id/friends_posts_recyclerView"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

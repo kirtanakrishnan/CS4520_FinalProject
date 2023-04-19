@@ -27,6 +27,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
 }
 
 
@@ -39,10 +43,12 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation 'com.spotify.android:auth:1.2.5' // Maven dependency
+    implementation 'com.spotify.android:auth:1.2.5' // spotify dependency
     implementation "com.google.code.gson:gson:2.6.1"
     implementation platform('com.google.firebase:firebase-bom:31.3.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-firestore'
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation 'se.michaelthelin.spotify:spotify-web-api-java:8.0.0' // spotify api wrapper
+
 }

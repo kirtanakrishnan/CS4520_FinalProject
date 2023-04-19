@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addPostLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddPostFragment">
+
+    <TextView
+        android:id="@+id/textViewShareSong"
+        android:layout_width="295dp"
+        android:layout_height="224dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="@string/shareSong"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonAddSong"
+        android:layout_width="159dp"
+        android:layout_height="64dp"
+        android:text="@string/addSong"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewShareSong" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

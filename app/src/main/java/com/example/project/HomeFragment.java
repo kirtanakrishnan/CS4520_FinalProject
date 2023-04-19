@@ -1,5 +1,6 @@
 package com.example.project;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,10 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import com.example.project.Interfaces.IFragmentCommunication;
+import com.example.project.Interfaces.IHomeToMain;
+import com.example.project.Interfaces.IPostToMain;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +35,8 @@ public class HomeFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
     private Button logoutButton;
     private IFragmentCommunication mListener;
+    private ImageView addButton;
+    private IHomeToMain homeToMain;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -71,6 +76,15 @@ public class HomeFragment extends Fragment {
         bottomNavigationView.findViewById(R.id.bottomNavigationView);
         friendsPostsRecyclerView = view.findViewById(R.id.friends_posts_recyclerView);
         friendsPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        addButton = view.findViewById(R.id.imageViewAddButton);
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                homeToMain.addPostButtonClicked();
+            }
+        });
+
 
       //  List<Post> postsList = getFriendsPosts(); // get the list of friends' posts
      //   adapter = new FriendsPostsAdapter(postsList);
@@ -81,19 +95,14 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuFriends:
-                mListener.navigationView(item);
-                Log.d("demo", "went to add friends fragment" );
-                return true;
-
-            case R.id.menuHome:
-
-            case R.id.menuProfile:
-                mListener.navigationView(item);
-                return true;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof IHomeToMain){
+            this.homeToMain = (IHomeToMain) context;
+        }else{
+            throw new RuntimeException(context.toString()+ "must implement IHomeToMain");
         }
-        return false;
     }
+
 }

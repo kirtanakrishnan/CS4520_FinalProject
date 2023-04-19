@@ -1,18 +1,13 @@
 package com.example.project;
 
-import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
-import com.example.project.Interfaces.IPostToMain;
-import com.example.project.Interfaces.IProfileToMain;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,14 +18,20 @@ public class PostFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_ARTIST = "song_artist";
+    private static final String ARG_TITLE = "song_title";
+    private static final String ARG_TIME = "time_posted";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private Button buttonAddSong;
-    private IPostToMain postToMain;
+    private String artist;
+    private String songTitle;
+    private String timePosted;
+    private TextView textViewArtist;
+    private TextView textViewTitle;
+    private TextView textViewTime;
+
+
+
 
     public PostFragment() {
         // Required empty public constructor
@@ -40,14 +41,16 @@ public class PostFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-
      * @return A new instance of fragment PostFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PostFragment newInstance(User user) {
+    public static PostFragment newInstance(Post post) {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
-        //args.putString(ARG_PARAM2, post);
+        args.putString(ARG_ARTIST, post.getSongArtist());
+        args.putString(ARG_TITLE, post.getSongTitle());
+        args.putString(ARG_TIME, post.getTimePosted());
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,8 +59,9 @@ public class PostFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            artist = getArguments().getString(ARG_ARTIST);
+            songTitle = getArguments().getString(ARG_TITLE);
+            timePosted = getArguments().getString(ARG_TIME);
         }
     }
 
@@ -65,24 +69,15 @@ public class PostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post, container, false);
-        buttonAddSong = view.findViewById(R.id.buttonAddSong);
-        buttonAddSong.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                postToMain.addSongButtonClicked();
-            }
-        });
+        textViewArtist = view.findViewById(R.id.textViewSongArtist);
+        textViewTitle = view.findViewById(R.id.textViewSongTitle);
+        textViewTime = view.findViewById(R.id.textViewTime);
+
+        textViewArtist.setText(artist);
+        textViewTitle.setText(songTitle);
+        textViewTime.setText(timePosted);
+
         // Inflate the layout for this fragment
         return view;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof IPostToMain){
-            this.postToMain = (IPostToMain) context;
-        }else{
-            throw new RuntimeException(context.toString()+ "must implement IPostToMain");
-        }
     }
 }

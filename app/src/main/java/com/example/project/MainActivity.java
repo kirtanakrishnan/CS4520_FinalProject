@@ -1,7 +1,5 @@
 package com.example.project;
 
-import static com.spotify.sdk.android.auth.AccountsQueryParameters.CLIENT_ID;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -12,6 +10,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.project.Interfaces.IFragmentCommunication;
+import com.example.project.Interfaces.IHomeToMain;
 import com.example.project.Interfaces.IPostToMain;
 import com.example.project.Interfaces.IProfileToMain;
 import com.spotify.sdk.android.auth.AuthorizationClient;
@@ -28,10 +28,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import okhttp3.OkHttpClient;
+import java.text.SimpleDateFormat;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+
+import se.michaelthelin.spotify.SpotifyApi;
+import se.michaelthelin.spotify.model_objects.specification.ArtistSimplified;
+import se.michaelthelin.spotify.model_objects.specification.PagingCursorbased;
+import se.michaelthelin.spotify.model_objects.specification.PlayHistory;
+import se.michaelthelin.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 
 public class MainActivity extends AppCompatActivity implements IFragmentCommunication, IProfileToMain,
-        IPostToMain, BottomNavigationView
+        IPostToMain, IHomeToMain, BottomNavigationView
                 .OnNavigationItemSelectedListener{
 
     private FirebaseAuth mAuth;
@@ -42,11 +51,11 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     private String token;
     private static final String RECENTLY_PLAYED = "https://api.spotify.com/v1/me/player/recently-played";
 
-
-
     // Request code will be used to verify if result comes from the login activity. Can be set to any integer.
     private static final int REQUEST_CODE = 1337;
-    private static final String REDIRECT_URI = "http://localhost:8080";
+    private static final String REDIRECT_URI = "http://localhost:8080/";
+    private static final String CLIENT_ID = "cdf1584220164b2ab8d3ba003d6b350b";
+    private SpotifyApi spotifyApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,14 +92,18 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     @Override
     protected void onStop() {
         super.onStop();
-        // Aaand we will finish off here.
     }
 
     public void connectToSpotifyButtonClicked() {
+        authorizationRequest();
+    }
+
+    private void authorizationRequest() {
+        String[] scopes = {"user-top-read", "user-read-recently-played"};
         AuthorizationRequest.Builder builder =
                 new AuthorizationRequest.Builder(CLIENT_ID, AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
 
-        builder.setScopes(new String[]{"streaming"});
+        builder.setScopes(scopes);
         AuthorizationRequest request = builder.build();
 
         AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request);
@@ -109,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                 case TOKEN:
                     // Handle successful response
                     token = response.getAccessToken();
+                    Log.d("demo", "SUCCESSFULLY RETRIEVED TOKEN: " + token);
                     break;
 
                 // Auth flow returned an error
@@ -213,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Log.d("demo", "NAV BAR ITEM SELECTED");
         switch (item.getItemId()) {
             case R.id.menuFriends:
                 getSupportFragmentManager()
@@ -246,12 +259,65 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 
     @Override
     public void addSongButtonClicked() {
-        OkHttpClient client = new OkHttpClient();
-        
+        Post post = getMostRecentSong();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.mainLayout, PostFragment.newInstance(post),
+                        "postFragment")
+                .commit();
+    }
+
+    private Post getMostRecentSong() {
+        spotifyApi = new SpotifyApi.Builder()
+                .setAccessToken(token)
+                .build();
+
+        GetCurrentUsersRecentlyPlayedTracksRequest getCurrentUsersRecentlyPlayedTracksRequest =
+                spotifyApi.getCurrentUsersRecentlyPlayedTracks()
+//                  .after(new Date(1517087230000L))
+//                  .before(new Date(1453932420000L))
+                        .limit(1)
+                        .build();
+        Post post = new Post();
+
+
+        try {
+            final CompletableFuture<PagingCursorbased<PlayHistory>> pagingCursorbasedFuture = getCurrentUsersRecentlyPlayedTracksRequest.executeAsync();
+
+            // Thread free to do other tasks...
+
+            // Example Only. Never block in production code.
+            final PagingCursorbased<PlayHistory> playHistoryPagingCursorbased = pagingCursorbasedFuture.join();
+            PlayHistory[] tracks = playHistoryPagingCursorbased.getItems();
+            post.setSongTitle(tracks[0].getTrack().getName());
+            Log.d("demo", tracks[0].getTrack().getName());
+            ArtistSimplified[] artists = tracks[0].getTrack().getArtists();
+            post.setSongArtist(artists[0].getName());
+            Log.d("demo", artists[0].getName());
+            String date = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
+            post.setTimePosted(date);
+            Log.d("demo", date);
+            return post;
+
+        } catch (CompletionException e) {
+            System.out.println("Error: " + e.getCause().getMessage());
+        } catch (CancellationException e) {
+            System.out.println("Async operation cancelled.");
+        }
+        return post;
     }
 
     @Override
     public void postButtonClicked() {
 
+    }
+
+    @Override
+    public void addPostButtonClicked() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.mainLayout, AddPostFragment.newInstance(),
+                        "addPostFragment")
+                .commit();
     }
 }
