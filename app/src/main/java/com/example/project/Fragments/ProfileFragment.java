@@ -9,10 +9,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.project.Interfaces.IProfileToMain;
+import com.example.project.Model.User;
 import com.example.project.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,15 +29,12 @@ public class ProfileFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_TOPSONGS = "top_songs";
+    private static final String ARG_USERNAME = "username";
 
-    // Request code will be used to verify if result comes from the login activity. Can be set to any integer.
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private Button buttonConnectSpotify;
     private IProfileToMain profileToMain;
+    private ArrayList<String> topSongs;
+    private String username;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -39,10 +42,19 @@ public class ProfileFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance() {
+    public static ProfileFragment newInstance(ArrayList<String> topSongs) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_TOPSONGS, topSongs);
 
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ProfileFragment newInstance(User user) {
+        ProfileFragment fragment = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_USERNAME, user.getName());
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,7 +63,8 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            topSongs = (ArrayList<String>) getArguments().getSerializable(ARG_TOPSONGS);
+            username = getArguments().getString(ARG_USERNAME);
         }
     }
 
@@ -59,18 +72,31 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        buttonConnectSpotify = view.findViewById(R.id.buttonConnectToSpotify);
-        buttonConnectSpotify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                profileToMain.connectToSpotifyButtonClicked();
-                buttonConnectSpotify.setClickable(false);
-                buttonConnectSpotify.setVisibility(View.GONE);
-            }
-        });
+
+        Button buttonConnectSpotify = view.findViewById(R.id.buttonConnectToSpotify);
+        ListView listViewTracks = view.findViewById(R.id.songs_list);
+        TextView textViewUsername = view.findViewById(R.id.profile_username);
+        textViewUsername.setText(username);
+
+        buttonConnectSpotify.setOnClickListener(view1 -> profileToMain.connectToSpotifyButtonClicked());
+
+        // display top 10 songs on profile
+        if(topSongs != null) {
+            buttonConnectSpotify.setClickable(false);
+            buttonConnectSpotify.setVisibility(View.GONE);
+
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                    getContext(),
+                    android.R.layout.simple_list_item_1,
+                    topSongs );
+
+            listViewTracks.setAdapter(arrayAdapter);
+        }
+
         // Inflate the layout for this fragment
         return view;
     }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -78,7 +104,7 @@ public class ProfileFragment extends Fragment {
         if (context instanceof IProfileToMain){
             this.profileToMain = (IProfileToMain) context;
         }else{
-            throw new RuntimeException(context.toString()+ "must implement IProfileToMain");
+            throw new RuntimeException(context + "must implement IProfileToMain");
         }
     }
 }

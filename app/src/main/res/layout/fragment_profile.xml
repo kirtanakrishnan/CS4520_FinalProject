@@ -11,7 +11,7 @@
         android:id="@+id/profile_avatar"
         android:layout_width="134dp"
         android:layout_height="136dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintBottom_toTopOf="@+id/profile_editProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -34,17 +34,17 @@
         android:id="@+id/profile_editProfileButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="72dp"
         android:text="@string/name_editProfile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.521"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
         android:id="@+id/songs_list"
-        android:layout_width="147dp"
-        android:layout_height="214dp"
+        android:layout_width="310dp"
+        android:layout_height="278dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,6 @@
         android:layout_marginTop="16dp"
         android:text="@string/name_top10"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.409"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonConnectToSpotify" />
 

@@ -47,9 +47,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 import se.michaelthelin.spotify.SpotifyApi;
+import se.michaelthelin.spotify.model_objects.specification.Artist;
 import se.michaelthelin.spotify.model_objects.specification.ArtistSimplified;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.PagingCursorbased;
 import se.michaelthelin.spotify.model_objects.specification.PlayHistory;
+import se.michaelthelin.spotify.model_objects.specification.Track;
+import se.michaelthelin.spotify.model_objects.specification.TrackSimplified;
+import se.michaelthelin.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
 import se.michaelthelin.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 
 public class MainActivity extends AppCompatActivity implements IFragmentCommunication, IProfileToMain,
@@ -106,6 +111,49 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
         authorizationRequest();
     }
 
+    @Override
+    public ArrayList<String> getTopTenSongs() {
+        ArrayList<String> tracks = getTopTenSongsHelper();
+        return tracks;
+    }
+
+
+    private ArrayList<String> getTopTenSongsHelper() {
+        spotifyApi = new SpotifyApi.Builder()
+                .setAccessToken(token)
+                .build();
+
+        GetUsersTopTracksRequest getUsersTopTracksRequest = spotifyApi.getUsersTopTracks()
+                .limit(10)
+                .offset(0)
+                .time_range("medium_term")
+                .build();
+        ArrayList<String> tracks = new ArrayList<>();
+
+
+        try {
+            final CompletableFuture<Paging<Track>> pagingFuture = getUsersTopTracksRequest.executeAsync();
+
+            // Thread free to do other tasks...
+
+            // Example Only. Never block in production code.
+            final Paging<Track> trackPaging = pagingFuture.join();
+            Track[] trackList = trackPaging.getItems();
+            for(Track track: trackList) {
+                ArtistSimplified[] artists = track.getArtists();
+                tracks.add(track.getName() + " by " + artists[0].getName());
+                System.out.println(track.getName() + " by " + artists[0].getName());
+            }
+
+            //     System.out.println("Total: " + trackPaging.getTotal());
+        } catch (CompletionException e) {
+            System.out.println("Error: " + e.getCause().getMessage());
+        } catch (CancellationException e) {
+            System.out.println("Async operation cancelled.");
+        }
+        return tracks;
+    }
+
     private void authorizationRequest() {
         String[] scopes = {"user-top-read", "user-read-recently-played"};
         AuthorizationRequest.Builder builder =
@@ -131,18 +179,25 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                     // Handle successful response
                     token = response.getAccessToken();
                     Toast.makeText(this, "Connected to Spotify!", Toast.LENGTH_SHORT).show();
+                    ArrayList<String> topSongs = getTopTenSongs();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.mainLayout, ProfileFragment.newInstance(topSongs),"profileFragment")
+                            .addToBackStack(null)
+                            .commit();
                     break;
 
                 // Auth flow returned an error
                 case ERROR:
                     // Handle error response
                     Log.d("demo", "FAILED TO CONNECT TO SPOTIFY");
+
                     Toast.makeText(this, "Failed to connect to Spotify", Toast.LENGTH_SHORT).show();
 
                     break;
 
                 // Most likely auth flow was cancelled
                 default:
+
                     // Handle other cases
             }
         }
@@ -257,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
             case R.id.menuProfile:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.mainLayout, ProfileFragment.newInstance(),
+                        .replace(R.id.mainLayout, ProfileFragment.newInstance(currentLocalUser),
                                 "profileFragment")
                         .commit();
                 return true;
