@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -41,17 +42,13 @@ public class AddFriendsFragment extends Fragment {
     private FirebaseUser mUser;
     private FirebaseFirestore db;
 
-    private TextView textViewAddFriends;
-    private EditText editTextEmailSearch;
     private TextView friends;
-    private Button add;
     private RecyclerView recyclerViewFriends;
     private ArrayList<User> friendsList;
     private static final String ARG_FRIENDS = "friends";
     private FriendsAdapter adapter;
     private User currentLocalUser;
-
-    private String friendEmail;
+    private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     public AddFriendsFragment() {
         // Required empty public constructor
@@ -72,7 +69,13 @@ public class AddFriendsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        friendsList = new ArrayList<>();
+//      track the users...
+        getUsersRealTime();
+        /*if (getArguments() != null) {
 
             this.friendsList = (ArrayList<User>) getArguments().getSerializable(ARG_FRIENDS);
             if(friendsList != null) {
@@ -83,7 +86,7 @@ public class AddFriendsFragment extends Fragment {
                 Log.d("demo", "posts is null");
 
             }
-        }
+        }*/
     }
 
     @Override
@@ -92,32 +95,30 @@ public class AddFriendsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_friends, container, false);
 
-        textViewAddFriends = view.findViewById(R.id.textViewAddFriends);
-        editTextEmailSearch = view.findViewById(R.id.editTextEmailSearch);
+
         friends = view.findViewById(R.id.friends);
-        add = view.findViewById(R.id.add);
         recyclerViewFriends = view.findViewById(R.id.recyclerViewFriends);
-
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                friendEmail = editTextEmailSearch.getText().toString().trim();
-
-               String name = String.valueOf(db.collection("users")
-                        .document(friendEmail).get(Source.valueOf("name")));
-
-               User friend = new User(name);
-
-               friendsList.add(friend);
-
-
-            }
-        });
+        recyclerViewLayoutManager = new LinearLayoutManager(getContext());
+        recyclerViewFriends.setLayoutManager(recyclerViewLayoutManager);
 
         adapter = new FriendsAdapter(getContext(), friendsList);
         Log.d("demo", "setting friends");
         recyclerViewFriends.setAdapter(adapter);
 
         return view;
+    }
+
+    private void getUsersRealTime() {
+        db.collection("users")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        friendsList.clear();
+                        for (DocumentSnapshot doc: value.getDocuments()) {
+                            friendsList.add(doc.toObject(User.class));
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
     }
 }

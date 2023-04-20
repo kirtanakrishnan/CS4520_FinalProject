@@ -33,6 +33,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
         return new FriendsAdapter.FriendsViewHolder(itemView);
     }
 
+    public ArrayList<User> getFriendsList() {
+        return friendsList;
+    }
+
+    public void setFriendsList(ArrayList<User> friendsList) {
+        this.friendsList = friendsList;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull FriendsAdapter.FriendsViewHolder holder, int position) {
         User friend = friendsList.get(position);
