@@ -92,8 +92,8 @@ public class AddFriendsFragment extends Fragment {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                       // friendsList.clear();
-                        for (DocumentSnapshot doc: value.getDocuments()) {
+                        // friendsList.clear();
+                        for (DocumentSnapshot doc : value.getDocuments()) {
                             friendsList.add(doc.toObject(User.class));
                             adapter.setFriendsList(friendsList);
                         }

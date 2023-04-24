@@ -77,14 +77,14 @@ public class ProfileFragment extends Fragment {
         buttonConnectSpotify.setOnClickListener(view1 -> profileToMain.connectToSpotifyButtonClicked());
 
         // display top 10 songs on profile
-        if(topSongs != null) {
+        if (topSongs != null) {
             buttonConnectSpotify.setClickable(false);
             buttonConnectSpotify.setVisibility(View.GONE);
 
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
                     getContext(),
                     android.R.layout.simple_list_item_1,
-                    topSongs );
+                    topSongs);
 
             listViewTracks.setAdapter(arrayAdapter);
         }
@@ -111,9 +111,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof IProfileToMain){
+        if (context instanceof IProfileToMain) {
             this.profileToMain = (IProfileToMain) context;
-        }else{
+        } else {
             throw new RuntimeException(context + "must implement IProfileToMain");
         }
     }

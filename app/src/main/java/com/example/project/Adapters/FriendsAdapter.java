@@ -14,7 +14,7 @@ import com.example.project.R;
 
 import java.util.ArrayList;
 
-public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsViewHolder>{
+public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsViewHolder> {
     private Context mContext;
     private ArrayList<User> friendsList;
 
@@ -46,6 +46,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
         holder.nameText.setText(friend.getName());
 
     }
+
     public void setUsers(ArrayList<User> friendsList) {
         this.friendsList = friendsList;
     }

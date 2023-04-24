@@ -40,7 +40,6 @@ public class AddPostFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-
      * @return A new instance of fragment PostFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -79,10 +78,10 @@ public class AddPostFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof IAddPostToMain){
+        if (context instanceof IAddPostToMain) {
             this.postToMain = (IAddPostToMain) context;
-        }else{
-            throw new RuntimeException(context.toString()+ "must implement IPostToMain");
+        } else {
+            throw new RuntimeException(context.toString() + "must implement IPostToMain");
         }
     }
 }

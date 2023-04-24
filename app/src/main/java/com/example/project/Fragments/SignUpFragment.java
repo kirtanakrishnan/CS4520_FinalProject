@@ -40,7 +40,6 @@ public class SignUpFragment extends Fragment {
     private ImageView avatar;
 
 
-
     public SignUpFragment() {
         // Required empty public constructor
     }
@@ -64,10 +63,10 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof IFragmentCommunication){
+        if (context instanceof IFragmentCommunication) {
             this.mListener = (IFragmentCommunication) context;
-        }else{
-            throw new RuntimeException(context.toString()+ "must implement SignUpFragment");
+        } else {
+            throw new RuntimeException(context.toString() + "must implement SignUpFragment");
         }
     }
 
@@ -92,22 +91,22 @@ public class SignUpFragment extends Fragment {
                 password = String.valueOf(editTextPasswordSignUp.getText()).trim();
                 confirmPassword = String.valueOf(editTextConfirmPassword.getText()).trim();
 
-                if(name.equals("")){
+                if (name.equals("")) {
                     editTextName.setError("Must input name!");
                 }
-                if(email.equals("")){
+                if (email.equals("")) {
                     editTextEmailSignUp.setError("Must input email!");
                 }
-                if(password.equals("")){
+                if (password.equals("")) {
                     editTextPasswordSignUp.setError("Password must not be empty!");
                 }
-                if(!confirmPassword.equals(password)){
+                if (!confirmPassword.equals(password)) {
                     editTextConfirmPassword.setError("Passwords must match!");
                 }
 
-                if(!name.equals("") && !email.equals("")
+                if (!name.equals("") && !email.equals("")
                         && !password.equals("")
-                        && confirmPassword.equals(password)){
+                        && confirmPassword.equals(password)) {
 
                     User user = new User(name, email);
 
@@ -116,7 +115,7 @@ public class SignUpFragment extends Fragment {
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if(task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         mUser = task.getResult().getUser();
 
 //                                    Adding name to the FirebaseUser...
@@ -128,7 +127,7 @@ public class SignUpFragment extends Fragment {
                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
-                                                        if(task.isSuccessful()) {
+                                                        if (task.isSuccessful()) {
                                                             mListener.registerDone(mUser, user);
                                                         }
                                                     }

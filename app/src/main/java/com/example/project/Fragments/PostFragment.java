@@ -32,7 +32,6 @@ public class PostFragment extends Fragment {
     private static final String ARG_LOCATION = "location";
 
 
-
     // TODO: Rename and change types of parameters
     private String artist;
     private String songTitle;
@@ -122,9 +121,9 @@ public class PostFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof IPostToMain){
+        if (context instanceof IPostToMain) {
             this.postToMain = (IPostToMain) context;
-        }else{
+        } else {
             throw new RuntimeException(context + "must implement IPostToMain");
         }
     }

@@ -62,10 +62,10 @@ public class LandingFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof IFragmentCommunication){
+        if (context instanceof IFragmentCommunication) {
             this.mListener = (IFragmentCommunication) context;
-        }else{
-            throw new RuntimeException(context.toString()+ "must implement LandingFragment");
+        } else {
+            throw new RuntimeException(context.toString() + "must implement LandingFragment");
         }
     }
 
@@ -87,20 +87,20 @@ public class LandingFragment extends Fragment {
                 email = editTextEmail.getText().toString().trim();
                 password = editTextPassword.getText().toString().trim();
 
-                if(email.equals("")){
+                if (email.equals("")) {
                     editTextEmail.setError("Must input email!");
                 }
-                if(password.equals("")){
+                if (password.equals("")) {
                     editTextPassword.setError("Password must not be empty!");
                 }
 
-                if(email.equals("")){
+                if (email.equals("")) {
                     editTextEmail.setError("Must input email!");
                 }
-                if(password.equals("")){
+                if (password.equals("")) {
                     editTextPassword.setError("Password must not be empty!");
                 }
-                if(!email.equals("") && !password.equals("")){
+                if (!email.equals("") && !password.equals("")) {
 //                    Sign in to the account....
                     mAuth.signInWithEmailAndPassword(email, password)
                             .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -112,13 +112,13 @@ public class LandingFragment extends Fragment {
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getContext(), "Login Failed!"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), "Login Failed!" + e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             })
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if(task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         mListener.populateHomeFragment(mAuth.getCurrentUser());
                                     }
                                 }

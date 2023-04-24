@@ -23,13 +23,15 @@ public class FriendsPostsAdapter extends RecyclerView.Adapter<FriendsPostsAdapte
         this.mContext = context;
         this.postsList = posts;
     }
+
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.post_row, parent, false);
 
-        return new PostViewHolder(itemView);    }
+        return new PostViewHolder(itemView);
+    }
 
     @Override
     public void onBindViewHolder(@NonNull FriendsPostsAdapter.PostViewHolder holder, int position) {
@@ -55,7 +57,6 @@ public class FriendsPostsAdapter extends RecyclerView.Adapter<FriendsPostsAdapte
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         public TextView postUsername, postSongName, postSongArtist, timePosted, location;
         public ImageView likeButton;
-
 
 
         public PostViewHolder(View view) {

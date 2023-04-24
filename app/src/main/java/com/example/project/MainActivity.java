@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -70,7 +69,7 @@ import se.michaelthelin.spotify.requests.data.player.GetCurrentUsersRecentlyPlay
 
 public class MainActivity extends AppCompatActivity implements IFragmentCommunication, IProfileToMain,
         IAddPostToMain, IHomeToMain, IPostToMain, BottomNavigationView
-                .OnNavigationItemSelectedListener{
+                .OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
@@ -88,16 +87,8 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     private String latitude;
     private String location;
     private LocationRequest mLocationRequest;
-
-    // initializing
-    // FusedLocationProviderClient
-    // object
     private FusedLocationProviderClient mFusedLocationClient;
-
-    // Initializing other items
-    // from layout file
-    int PERMISSION_ID = 44;
-
+    private int PERMISSION_ID = 44;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
-
 
     @Override
     protected void onStop() {
@@ -143,14 +133,9 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     }
 
     @Override
-    public void profileAvatarClicked() {
-
-    }
-
-    @Override
     public void editProfileButtonClicked() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLayout, new EditProfileFragment(),"editProfileFragment")
+                .replace(R.id.mainLayout, new EditProfileFragment(), "editProfileFragment")
                 .commit();
     }
 
@@ -172,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 
             final Paging<Track> trackPaging = pagingFuture.join();
             Track[] trackList = trackPaging.getItems();
-            for(Track track: trackList) {
+            for (Track track : trackList) {
                 ArtistSimplified[] artists = track.getArtists();
                 tracks.add(track.getName() + " by " + artists[0].getName());
                 System.out.println(track.getName() + " by " + artists[0].getName());
@@ -214,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                     ArrayList<String> topSongs = getTopTenSongs();
                     currentLocalUser.setTopTracks(topSongs);
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.mainLayout, ProfileFragment.newInstance(currentLocalUser),"profileFragment")
+                            .replace(R.id.mainLayout, ProfileFragment.newInstance(currentLocalUser), "profileFragment")
                             .addToBackStack(null)
                             .commit();
                     break;
@@ -242,31 +227,31 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 
     private void populateScreen() {
         //      Check for Authenticated users ....
-        if(currentUser != null){
+        if (currentUser != null) {
 //            The user is authenticated, fetching the details of the current user from Firebase...
             db.collection("users")
                     .document(currentUser.getEmail())
                     .get()
                     .addOnCompleteListener(task -> {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             currentLocalUser = task.getResult()
                                     .toObject(User.class);
                             //Populating The Main Fragment....
                             getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.mainLayout, new HomeFragment(currentLocalUser),"homeFragment")
+                                    .replace(R.id.mainLayout, new HomeFragment(currentLocalUser), "homeFragment")
                                     .commit();
                             bottomNavigationView.setVisibility(View.VISIBLE);
 
-                        }else{
+                        } else {
                             mAuth.signOut();
                             currentUser = null;
                             populateScreen();
                         }
                     });
-        }else{
+        } else {
 //            The user is not logged in, load the login Fragment....
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.mainLayout, LandingFragment.newInstance(),"landingFragment")
+                    .replace(R.id.mainLayout, LandingFragment.newInstance(), "landingFragment")
                     .commit();
             bottomNavigationView.setVisibility(View.INVISIBLE);
         }
@@ -281,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     @Override
     public void populateSignUpFragment() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainLayout, SignUpFragment.newInstance(),"signUpFragment")
+                .replace(R.id.mainLayout, SignUpFragment.newInstance(), "signUpFragment")
                 .addToBackStack(null)
                 .commit();
 
@@ -291,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     public void registerDone(FirebaseUser firebaseUser, User user) {
         this.currentUser = firebaseUser;
 //        Updating the Firestore structure....
-            updateFirestoreWithUserDetails(user);
+        updateFirestoreWithUserDetails(user);
     }
 
     private void updateFirestoreWithUserDetails(User user) {
@@ -322,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                         .commit();
                 return true;
 
-           case R.id.menuHome:
+            case R.id.menuHome:
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.mainLayout, HomeFragment.newInstance(posts),
@@ -347,10 +332,11 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     public void addSongButtonClicked() {
         getLocation();
     }
+
     private void setPostLocationAndPost() {
         Post post = getMostRecentSong();
-        if(location != null) {
-            post.setLocation("Boston, MA");
+        if (location != null) {
+            post.setLocation(location);
             post.setUsername(currentLocalUser.getName());
 
         }
@@ -393,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
             System.out.println("Error: " + e.getCause().getMessage());
         } catch (CancellationException e) {
             System.out.println("Async operation cancelled.");
-        } catch(AssertionError e) {
+        } catch (AssertionError e) {
             Toast.makeText(this, "You must connect to Spotify before posting", Toast.LENGTH_SHORT).show();
         }
         return post;
@@ -420,8 +406,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 
                     }
                 });
-            }
-            else {
+            } else {
                 Toast.makeText(this, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
@@ -436,8 +421,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     @SuppressLint("MissingPermission")
     private void requestNewLocationData() {
 
-        // Initializing LocationRequest
-        // object with appropriate methods
+        // Initializing LocationRequest object with appropriate methods
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             mLocationRequest = new LocationRequest();
             mLocationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
@@ -446,8 +430,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
             mLocationRequest.setNumUpdates(1);
         }
 
-        // setting LocationRequest
-        // on FusedLocationClient
+        // setting LocationRequest on FusedLocationClient
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.getMainLooper());
     }
@@ -485,7 +468,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    // If everything is alright then
     @Override
     public void
     onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -498,10 +480,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
         }
     }
 
-
-
-
-
     @Override
     public void postButtonClicked(Post post) {
         posts.add(post);
@@ -510,7 +488,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                 .replace(R.id.mainLayout, HomeFragment.newInstance(posts),
                         "homeFragment")
                 .commit();
-
     }
 
     @Override
@@ -521,4 +498,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                         "addPostFragment")
                 .commit();
     }
+
+    @Override
+    public void profileAvatarClicked() {}
 }

@@ -41,9 +41,11 @@ public class HomeFragment extends Fragment {
     private ImageView addButton;
     private IHomeToMain homeToMain;
     private ArrayList<Post> posts;
+
     public HomeFragment() {
         // Required empty public constructor
     }
+
     public HomeFragment(User currentLocalUser) {
         this.currentLocalUser = currentLocalUser;
     }
@@ -62,9 +64,8 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.posts = (ArrayList<Post>) getArguments().getSerializable(ARG_POSTS);
-            if(posts != null) {
-            }
-            else{
+            if (posts != null) {
+            } else {
             }
         }
         getActivity().setTitle("Home");
@@ -103,14 +104,12 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof IHomeToMain){
+        if (context instanceof IHomeToMain) {
             this.homeToMain = (IHomeToMain) context;
-        } else if (context instanceof IFragmentCommunication){
+        } else if (context instanceof IFragmentCommunication) {
             this.mListener = (IFragmentCommunication) context;
-        }
-
-        else{
-            throw new RuntimeException(context.toString()+ "must implement IHomeToMain");
+        } else {
+            throw new RuntimeException(context.toString() + "must implement IHomeToMain");
         }
 
     }
