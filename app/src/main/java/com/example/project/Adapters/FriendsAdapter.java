@@ -1,17 +1,16 @@
-package com.example.project;
+package com.example.project.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.project.Model.Post;
 import com.example.project.Model.User;
+import com.example.project.R;
 
 import java.util.ArrayList;
 

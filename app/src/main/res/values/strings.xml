@@ -31,4 +31,5 @@
     <string name="name_top10">Top 10 Tracks</string>
     <string name="name_editProfile">Edit Profile</string>
     <string name="connectToSpotify">Connect To Spotify</string>
+    <string name="logout">Logout</string>
 </resources>

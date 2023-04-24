@@ -12,11 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.example.project.FriendsPostsAdapter;
+import com.example.project.Adapters.FriendsPostsAdapter;
 import com.example.project.Interfaces.IFragmentCommunication;
 import com.example.project.Interfaces.IHomeToMain;
 import com.example.project.Model.Post;
@@ -25,7 +23,6 @@ import com.example.project.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +37,6 @@ public class HomeFragment extends Fragment {
 
     private User currentLocalUser;
     private BottomNavigationView bottomNavigationView;
-    private ImageButton logoutButton;
     private IFragmentCommunication mListener;
     private ImageView addButton;
     private IHomeToMain homeToMain;
@@ -67,12 +63,8 @@ public class HomeFragment extends Fragment {
         if (getArguments() != null) {
             this.posts = (ArrayList<Post>) getArguments().getSerializable(ARG_POSTS);
             if(posts != null) {
-                Log.d("demo", "posts: " + posts.toString());
-
             }
             else{
-                Log.d("demo", "posts is null");
-
             }
         }
         getActivity().setTitle("Home");
@@ -93,8 +85,6 @@ public class HomeFragment extends Fragment {
         friendsPostsRecyclerView = view.findViewById(R.id.friends_posts_recyclerView);
         friendsPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addButton = view.findViewById(R.id.imageViewAddButton);
-        logoutButton = view.findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(this::onLogoutPressed);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,14 +93,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
-      //  List<Post> postsList = getFriendsPosts(); // get the list of friends' posts
         adapter = new FriendsPostsAdapter(getContext(), posts);
-        Log.d("demo", "setting posts");
         friendsPostsRecyclerView.setAdapter(adapter);
-
-
-
 
         return view;
 
@@ -130,12 +114,4 @@ public class HomeFragment extends Fragment {
         }
 
     }
-
-    private void onLogoutPressed(View view) {
-        mListener.logoutPressed();
-    }
-
-
-
-
 }

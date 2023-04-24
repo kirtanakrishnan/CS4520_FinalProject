@@ -30,7 +30,6 @@ import com.google.firebase.auth.UserProfileChangeRequest;
  * create an instance of this fragment.
  */
 public class SignUpFragment extends Fragment {
-
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private EditText editTextName, editTextEmailSignUp, editTextPasswordSignUp,

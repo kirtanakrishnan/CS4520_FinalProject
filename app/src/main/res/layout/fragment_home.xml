@@ -20,19 +20,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.858" />
 
-    <ImageButton
-        android:id="@+id/logoutButton"
-        android:layout_width="37dp"
-        android:layout_height="41dp"
-        android:src="@android:drawable/presence_offline"
-        android:tint="@color/design_default_color_error"
-        app:layout_constraintBottom_toTopOf="@+id/friends_posts_recyclerView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.941"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
     <ImageView
         android:id="@+id/imageViewAddButton"
         android:layout_width="68dp"

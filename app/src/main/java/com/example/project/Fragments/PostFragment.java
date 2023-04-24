@@ -29,6 +29,8 @@ public class PostFragment extends Fragment {
     private static final String ARG_TITLE = "song_title";
     private static final String ARG_TIME = "time_posted";
     private static final String ARG_USERNAME = "username";
+    private static final String ARG_LOCATION = "location";
+
 
 
     // TODO: Rename and change types of parameters
@@ -36,10 +38,13 @@ public class PostFragment extends Fragment {
     private String songTitle;
     private String timePosted;
     private String username;
+    private String location;
     private TextView textViewArtist;
     private TextView textViewTitle;
     private TextView textViewTime;
     private TextView textViewUsername;
+    private TextView textViewLocation;
+
     private Button buttonPost;
     private IPostToMain postToMain;
 
@@ -62,6 +67,7 @@ public class PostFragment extends Fragment {
         args.putString(ARG_TITLE, post.getSongTitle());
         args.putString(ARG_TIME, post.getTimePosted());
         args.putString(ARG_USERNAME, post.getUsername());
+        args.putString(ARG_LOCATION, post.getLocation());
 
         fragment.setArguments(args);
         return fragment;
@@ -75,6 +81,7 @@ public class PostFragment extends Fragment {
             songTitle = getArguments().getString(ARG_TITLE);
             timePosted = getArguments().getString(ARG_TIME);
             username = getArguments().getString(ARG_USERNAME);
+            location = getArguments().getString(ARG_LOCATION);
         }
     }
 
@@ -86,12 +93,14 @@ public class PostFragment extends Fragment {
         textViewTitle = view.findViewById(R.id.textViewSongTitle);
         textViewTime = view.findViewById(R.id.textViewTime);
         textViewUsername = view.findViewById(R.id.textViewUsernamePost);
+        textViewLocation = view.findViewById(R.id.textViewLocation);
         buttonPost = view.findViewById(R.id.buttonPost);
 
         textViewArtist.setText(artist);
         textViewTitle.setText(songTitle);
         textViewTime.setText(timePosted);
         textViewUsername.setText(username);
+        textViewLocation.setText(location);
 
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +110,7 @@ public class PostFragment extends Fragment {
                 post.setTimePosted(timePosted);
                 post.setSongArtist(artist);
                 post.setSongTitle(songTitle);
+                post.setLocation(location);
                 postToMain.postButtonClicked(post);
             }
         });

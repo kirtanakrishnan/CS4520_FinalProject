@@ -6,8 +6,8 @@ public class Post {
     private String username;
     private String songTitle;
     private String songArtist;
-    private String timePosted; // change to another? type?
-    private String location; // change to another type?
+    private String timePosted;
+    private String location;
 
     private ImageView likeButton;
 

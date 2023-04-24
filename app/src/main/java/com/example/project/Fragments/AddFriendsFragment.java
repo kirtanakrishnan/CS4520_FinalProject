@@ -7,18 +7,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.project.FriendsAdapter;
-import com.example.project.FriendsPostsAdapter;
-import com.example.project.Model.Post;
+import com.example.project.Adapters.FriendsAdapter;
 import com.example.project.Model.User;
 import com.example.project.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +22,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 
@@ -45,7 +38,6 @@ public class AddFriendsFragment extends Fragment {
     private TextView friends;
     private RecyclerView recyclerViewFriends;
     private ArrayList<User> friendsList;
-    private static final String ARG_FRIENDS = "friends";
     private FriendsAdapter adapter;
     private User currentLocalUser;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
@@ -75,18 +67,6 @@ public class AddFriendsFragment extends Fragment {
         friendsList = new ArrayList<>();
 //      track the users...
         getUsersRealTime();
-        /*if (getArguments() != null) {
-
-            this.friendsList = (ArrayList<User>) getArguments().getSerializable(ARG_FRIENDS);
-            if(friendsList != null) {
-                Log.d("demo", "posts: " + friendsList.toString());
-
-            }
-            else{
-                Log.d("demo", "posts is null");
-
-            }
-        }*/
     }
 
     @Override
@@ -102,7 +82,6 @@ public class AddFriendsFragment extends Fragment {
         recyclerViewFriends.setLayoutManager(recyclerViewLayoutManager);
 
         adapter = new FriendsAdapter(getContext(), friendsList);
-        Log.d("demo", "setting friends");
         recyclerViewFriends.setAdapter(adapter);
 
         return view;
@@ -113,9 +92,10 @@ public class AddFriendsFragment extends Fragment {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        friendsList.clear();
+                       // friendsList.clear();
                         for (DocumentSnapshot doc: value.getDocuments()) {
                             friendsList.add(doc.toObject(User.class));
+                            adapter.setFriendsList(friendsList);
                         }
                         adapter.notifyDataSetChanged();
                     }

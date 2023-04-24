@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,8 +41,6 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-
     public static ProfileFragment newInstance(User user) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -70,6 +69,10 @@ public class ProfileFragment extends Fragment {
         ListView listViewTracks = view.findViewById(R.id.songs_list);
         TextView textViewUsername = view.findViewById(R.id.profile_username);
         textViewUsername.setText(username);
+        Button buttonLogout = view.findViewById(R.id.buttonLogout);
+        Button buttonEditProfile = view.findViewById(R.id.profile_editProfileButton);
+        ImageView profileAvatar = view.findViewById(R.id.imageViewProfileAvatar);
+        profileAvatar.setVisibility(View.VISIBLE);
 
         buttonConnectSpotify.setOnClickListener(view1 -> profileToMain.connectToSpotifyButtonClicked());
 
@@ -86,6 +89,20 @@ public class ProfileFragment extends Fragment {
             listViewTracks.setAdapter(arrayAdapter);
         }
 
+        buttonLogout.setOnClickListener(view12 -> profileToMain.logoutButtonClicked());
+        profileAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profileToMain.profileAvatarClicked();
+            }
+        });
+
+        buttonEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profileToMain.editProfileButtonClicked();
+            }
+        });
         // Inflate the layout for this fragment
         return view;
     }

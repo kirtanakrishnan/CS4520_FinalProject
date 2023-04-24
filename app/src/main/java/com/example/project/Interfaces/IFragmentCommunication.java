@@ -13,5 +13,4 @@ public interface IFragmentCommunication {
 
     void navigationView(MenuItem item);
 
-    void logoutPressed();
 }

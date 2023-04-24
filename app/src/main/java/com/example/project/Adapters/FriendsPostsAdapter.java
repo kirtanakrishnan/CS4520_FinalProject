@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.project.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project.Model.Post;
+import com.example.project.R;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,7 @@ public class FriendsPostsAdapter extends RecyclerView.Adapter<FriendsPostsAdapte
         holder.postUsername.setText(post.getUsername());
         holder.postSongName.setText(post.getSongTitle());
         holder.postSongArtist.setText(post.getSongArtist());
+        holder.location.setText(post.getLocation());
         holder.timePosted.setText(post.getTimePosted());
         holder.likeButton.findViewById(R.id.imageViewLikeButton);
     }
@@ -51,7 +53,7 @@ public class FriendsPostsAdapter extends RecyclerView.Adapter<FriendsPostsAdapte
 
 
     public static class PostViewHolder extends RecyclerView.ViewHolder {
-        public TextView postUsername, postSongName, postSongArtist, timePosted;
+        public TextView postUsername, postSongName, postSongArtist, timePosted, location;
         public ImageView likeButton;
 
 
@@ -62,6 +64,7 @@ public class FriendsPostsAdapter extends RecyclerView.Adapter<FriendsPostsAdapte
             postSongName = view.findViewById(R.id.textViewSongName);
             postSongArtist = view.findViewById(R.id.textViewArtist);
             timePosted = view.findViewById(R.id.textViewTimePosted);
+            location = view.findViewById(R.id.textViewLocationPosted);
             likeButton = view.findViewById(R.id.imageViewLikeButton);
 
             // initialize other views in the row as necessary

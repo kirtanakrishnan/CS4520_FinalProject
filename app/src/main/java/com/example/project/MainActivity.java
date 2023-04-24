@@ -2,17 +2,26 @@ package com.example.project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
+import androidx.core.app.ActivityCompat;
 
+
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Looper;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.project.Fragments.AddFriendsFragment;
 import com.example.project.Fragments.AddPostFragment;
+import com.example.project.Fragments.EditProfileFragment;
 import com.example.project.Fragments.HomeFragment;
 import com.example.project.Fragments.LandingFragment;
 import com.example.project.Fragments.PostFragment;
@@ -25,6 +34,13 @@ import com.example.project.Interfaces.IPostToMain;
 import com.example.project.Interfaces.IProfileToMain;
 import com.example.project.Model.Post;
 import com.example.project.Model.User;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -68,6 +84,20 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     private static final String CLIENT_ID = "cdf1584220164b2ab8d3ba003d6b350b";
     private SpotifyApi spotifyApi;
     private final ArrayList<Post> posts = new ArrayList<>();
+    private String longitude;
+    private String latitude;
+    private String location;
+    private LocationRequest mLocationRequest;
+
+    // initializing
+    // FusedLocationProviderClient
+    // object
+    private FusedLocationProviderClient mFusedLocationClient;
+
+    // Initializing other items
+    // from layout file
+    int PERMISSION_ID = 44;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,24 +114,17 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
         bottomNavigationView
                 .setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.menuHome);
-        // Get the FragmentManager
-       // FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // Create a new instance of the fragment you want to display
-      //  LandingFragment landingFragment = new LandingFragment();
-
-        // Replace the current fragment with the new one
-        /*fragmentManager.beginTransaction()
-                .replace(R.id.mainLayout, landingFragment)
-                .commit();*/
-
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
+
 
     @Override
     protected void onStop() {
         super.onStop();
     }
 
+    @Override
     public void connectToSpotifyButtonClicked() {
         authorizationRequest();
     }
@@ -111,6 +134,25 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
         return getTopTenSongsHelper();
     }
 
+    @Override
+    public void logoutButtonClicked() {
+        mAuth.signOut();
+        currentUser = null;
+        token = null;
+        populateScreen();
+    }
+
+    @Override
+    public void profileAvatarClicked() {
+
+    }
+
+    @Override
+    public void editProfileButtonClicked() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.mainLayout, new EditProfileFragment(),"editProfileFragment")
+                .commit();
+    }
 
     private ArrayList<String> getTopTenSongsHelper() {
         spotifyApi = new SpotifyApi.Builder()
@@ -180,8 +222,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                 // Auth flow returned an error
                 case ERROR:
                     // Handle error response
-                    Log.d("demo", "FAILED TO CONNECT TO SPOTIFY");
-
                     Toast.makeText(this, "Failed to connect to Spotify", Toast.LENGTH_SHORT).show();
 
                     break;
@@ -207,28 +247,26 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
             db.collection("users")
                     .document(currentUser.getEmail())
                     .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if(task.isSuccessful()){
-                                currentLocalUser = task.getResult()
-                                        .toObject(User.class);
-                                //Populating The Main Fragment....
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.mainLayout, new HomeFragment(currentLocalUser),"homeFragment")
-                                        .commit();
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()){
+                            currentLocalUser = task.getResult()
+                                    .toObject(User.class);
+                            //Populating The Main Fragment....
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.mainLayout, new HomeFragment(currentLocalUser),"homeFragment")
+                                    .commit();
+                            bottomNavigationView.setVisibility(View.VISIBLE);
 
-                            }else{
-                                mAuth.signOut();
-                                currentUser = null;
-                                populateScreen();
-                            }
+                        }else{
+                            mAuth.signOut();
+                            currentUser = null;
+                            populateScreen();
                         }
                     });
         }else{
 //            The user is not logged in, load the login Fragment....
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView, LandingFragment.newInstance(),"landingFragment")
+                    .replace(R.id.mainLayout, LandingFragment.newInstance(),"landingFragment")
                     .commit();
             bottomNavigationView.setVisibility(View.INVISIBLE);
         }
@@ -273,13 +311,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
     }
 
     @Override
-    public void logoutPressed() {
-        mAuth.signOut();
-        currentUser = null;
-        populateScreen();
-    }
-
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuFriends:
@@ -289,7 +320,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
                                 "addFriendsFragment")
                         .addToBackStack("addFriendsFragment")
                         .commit();
-                Log.d("demo", "went to add friends fragment" );
                 return true;
 
            case R.id.menuHome:
@@ -315,13 +345,21 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 
     @Override
     public void addSongButtonClicked() {
+        getLocation();
+    }
+    private void setPostLocationAndPost() {
         Post post = getMostRecentSong();
-        post.setUsername(currentLocalUser.getName());
+        if(location != null) {
+            post.setLocation("Boston, MA");
+            post.setUsername(currentLocalUser.getName());
+
+        }
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.mainLayout, PostFragment.newInstance(post),
                         "postFragment")
                 .commit();
+
     }
 
     private Post getMostRecentSong() {
@@ -335,25 +373,20 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
 //                  .before(new Date(1453932420000L))
                         .limit(1)
                         .build();
+
+
         Post post = new Post();
-
-
         try {
             final CompletableFuture<PagingCursorbased<PlayHistory>> pagingCursorbasedFuture = getCurrentUsersRecentlyPlayedTracksRequest.executeAsync();
 
-            // Thread free to do other tasks...
-
-            // Example Only. Never block in production code.
             final PagingCursorbased<PlayHistory> playHistoryPagingCursorbased = pagingCursorbasedFuture.join();
             PlayHistory[] tracks = playHistoryPagingCursorbased.getItems();
             post.setSongTitle(tracks[0].getTrack().getName());
-            Log.d("demo", tracks[0].getTrack().getName());
             ArtistSimplified[] artists = tracks[0].getTrack().getArtists();
             post.setSongArtist(artists[0].getName());
-            Log.d("demo", artists[0].getName());
-            String date = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
+            String datePattern = "yyyy-MM-dd HH:mm:ss aaa";
+            String date = new SimpleDateFormat(datePattern).format(new java.util.Date());
             post.setTimePosted(date);
-            Log.d("demo", date);
             return post;
 
         } catch (CompletionException e) {
@@ -365,6 +398,109 @@ public class MainActivity extends AppCompatActivity implements IFragmentCommunic
         }
         return post;
     }
+
+    @SuppressLint("MissingPermission")
+    private void getLocation() {
+        // check if permissions are given
+        if (checkPermissions()) {
+
+            // check if location is enabled
+            if (isLocationEnabled()) {
+
+                // getting last location from FusedLocationClient object
+                mFusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
+                    Location locationObj = task.getResult();
+                    if (locationObj == null) {
+                        requestNewLocationData();
+                    } else {
+                        latitude = String.valueOf(locationObj.getLatitude());
+                        longitude = String.valueOf(locationObj.getLongitude());
+                        location = latitude + " " + longitude;
+                        setPostLocationAndPost();
+
+                    }
+                });
+            }
+            else {
+                Toast.makeText(this, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        } else {
+            // if permissions aren't available,
+            // request for permissions
+            requestPermissions();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void requestNewLocationData() {
+
+        // Initializing LocationRequest
+        // object with appropriate methods
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            mLocationRequest = new LocationRequest();
+            mLocationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
+            mLocationRequest.setInterval(5);
+            mLocationRequest.setFastestInterval(0);
+            mLocationRequest.setNumUpdates(1);
+        }
+
+        // setting LocationRequest
+        // on FusedLocationClient
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.getMainLooper());
+    }
+
+    private LocationCallback mLocationCallback = new LocationCallback() {
+
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            Location mLastLocation = locationResult.getLastLocation();
+            latitude = String.valueOf(mLastLocation.getLatitude());
+            longitude = String.valueOf(mLastLocation.getLongitude());
+            location = latitude + " " + longitude;
+        }
+    };
+
+    // method to check for permissions
+    private boolean checkPermissions() {
+        return ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    // method to request for permissions
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
+    }
+
+    // method to check if location is enabled
+    private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+    // If everything is alright then
+    @Override
+    public void
+    onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocation();
+            }
+        }
+    }
+
+
+
+
 
     @Override
     public void postButtonClicked(Post post) {
